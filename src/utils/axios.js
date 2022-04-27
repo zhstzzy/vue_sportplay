@@ -1,5 +1,5 @@
 import axios from "axios";
-import qs from "qs";
+// import qs from "qs"; // qs.stringify(data)可以把data变成&连接的
 
 // axios.defaults.baseURL = ''  //正式
 axios.defaults.baseURL = 'http://localhost:9000' //测试
@@ -38,41 +38,43 @@ axios.interceptors.response.use(
     });
   }
 );
-export default {
-  /**
-   * @param {String} url 
-   * @param {Object} data 
-   * @returns Promise
-   */
-  post(url, data) {
-    return new Promise((resolve, reject) => {
-      axios({
-        method: 'post',
-        url,
-        data: qs.stringify(data),
-      })
-        .then(res => {
-          resolve(res.data)
-        })
-        .catch(err => {
-          reject(err)
-        });
-    })
-  },
+export default axios
 
-  get(url, data) {
-    return new Promise((resolve, reject) => {
-      axios({
-        method: 'get',
-        url,
-        params: data,
-      })
-        .then(res => {
-          resolve(res.data)
-        })
-        .catch(err => {
-          reject(err)
-        })
-    })
-  }
-};
+// export default {
+//   /**
+//    * @param {String} url 
+//    * @param {Object} data 
+//    * @returns Promise
+//    */
+//   post(url, data) {
+//     return new Promise((resolve, reject) => {
+//       axios({
+//         method: 'post',
+//         url,
+//         data: qs.stringify(data),
+//       })
+//         .then(res => {
+//           resolve(res.data)
+//         })
+//         .catch(err => {
+//           reject(err)
+//         });
+//     })
+//   },
+
+//   get(url, data) {
+//     return new Promise((resolve, reject) => {
+//       axios({
+//         method: 'get',
+//         url,
+//         params: data,
+//       })
+//         .then(res => {
+//           resolve(res.data)
+//         })
+//         .catch(err => {
+//           reject(err)
+//         })
+//     })
+//   }
+// };

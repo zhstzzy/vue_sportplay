@@ -8,7 +8,7 @@
       </div>
       <div class="login_form">
         <!-- 表单区域 -->
-        <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="100px">
+        <el-form :model="loginForm" :rules="loginRules" ref="loginFormRef" label-width="100px">
           <!-- 用户名 -->
           <el-form-item label="用户名" prop="username">
             <el-input v-model="loginForm.username" prefix-icon="iconfont icon-denglu-yonghu"></el-input>
@@ -19,8 +19,8 @@
           </el-form-item>
           <!-- 按钮 -->
           <el-form-item class="btns">
-            <el-button type="primary" @click="login('loginForm')">登录</el-button>
-            <el-button @click="resetLoginForm('loginForm')">重置</el-button>
+            <el-button type="primary" @click="login('loginFormRef')">登录</el-button>
+            <el-button @click="resetLoginForm('loginFormRef')">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -51,17 +51,16 @@ export default {
   methods: {
     // 登录
     login(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          this.$axios
-            .post("/test")
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-          alert("submit!");
+          const { data: res } = await this.axios.post("/login",this.loginForm);
+          console.log(res);
+          if (res.code == 200) {
+            this.$message.success("登录成功")
+            this.$router.push({path:"/home"})
+          }else{
+            this.$message.error("登录失败")
+          }
         } else {
           console.log("error submit!!");
           return false;
