@@ -4,7 +4,7 @@ import Register from "../components/RegisterView.vue";
 import Home from "../components/Home.vue";
 import Welcome from "../components/Welcome.vue";
 import UserList from "../components/admin/UserList.vue";
-import Test from "../views/Demo");
+import Test from "../views/Demo";
 
 const routes = [
   {
