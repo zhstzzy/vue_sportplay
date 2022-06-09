@@ -1,8 +1,12 @@
 <template>
-  <router-view v-if="routerState"></router-view>
+  <el-config-provider :locale="locale">
+    <router-view v-if="routerState"></router-view>
+  </el-config-provider>
 </template>
 
 <script>
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+
 export default {
   name: "App",
   //向子组件注入依赖
@@ -15,6 +19,7 @@ export default {
   data() {
     return {
       routerState: true,
+      locale: zhCn,
     };
   },
   methods: {

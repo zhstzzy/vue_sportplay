@@ -3,20 +3,31 @@
     <el-container class="home-container">
       <el-header>
         <div class="div-header">
-          <img class="logo-header" src="../assets/logo.png" alt />
+          <img class="logo-header" src="../assets/logo.png" alt/>
           <span>个人运动平台</span>
         </div>
         <div>
-          <span style="margin-right: 15px;">{{username}}</span>
-          <el-button type="info" @click="logout">登出</el-button>
+          <el-dropdown @command="handleCommand">
+          <span class="username">
+            {{ username }}
+            <el-icon class="el-icon--right"><arrow-down/></el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="a">个人中心</el-dropdown-item>
+              <el-dropdown-item command="b">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+          </el-dropdown>
         </div>
       </el-header>
       <el-container>
         <el-aside :width="isCollapse ? '64px' : '200px'">
           <div class="toggle-button" @click="toggleCollapse">|||</div>
-          <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff" :collapse="isCollapse" :collapse-transition="false" :router="true" :default-active="activePath">
+          <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff" :collapse="isCollapse"
+                   :collapse-transition="false" :router="true" :default-active="activePath">
             <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
-              <template v-slot:title>
+              <template #title>
                 <i :class="item.icon"></i>
                 <span>{{ item.title }}</span>
               </template>
@@ -42,7 +53,7 @@ export default {
       isCollapse: false,
       username: "",
       menuList: [],
-      activePath:"/user",
+      activePath: "/user",
     };
   },
   created() {
@@ -52,6 +63,11 @@ export default {
     this.activePath = window.sessionStorage.getItem("activePath");
   },
   methods: {
+    handleCommand(command) {
+      if (command === 'b') {
+        this.logout();
+      }
+    },
     // 安全退出
     logout() {
       window.sessionStorage.clear(); //清除 session
@@ -59,17 +75,17 @@ export default {
     },
     // 获取导航菜单方法
     async getMenuList() {
-      const { data: res } = await this.axios.get("/menus");
+      const {data: res} = await this.axios.get("/menus");
       console.log(res);
-      if (res.code != 200) return this.$message.error({ showClose: true, message: res.message });
+      if (res.code !== 200) return this.$message.error({showClose: true, message: res.message});
       this.menuList = res.data.menus;
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse;
     },
-    saveNavState(activePath){
+    saveNavState(activePath) {
       // 放入 session 中
-      window.sessionStorage.setItem("activePath",activePath);
+      window.sessionStorage.setItem("activePath", activePath);
       this.activePath = activePath;
     }
   },
@@ -80,9 +96,11 @@ export default {
 .home {
   height: 100%;
 }
+
 .home-container {
   height: 100%;
 }
+
 .el-header {
   background-color: #373d41;
   display: flex;
@@ -91,17 +109,16 @@ export default {
   align-items: center;
   color: #fff;
   font-size: 20px;
+
   .div-header {
     display: flex;
     align-items: center;
-    span {
-      margin-left: 15px;
-    }
   }
 }
 
 .el-aside {
   background-color: #333744;
+
   .el-menu {
     border-right: none;
   }
@@ -115,6 +132,7 @@ export default {
   width: 65px;
   height: 65px;
 }
+
 .toggle-button {
   background-color: #4a5064;
   font-size: 10px;
@@ -123,5 +141,11 @@ export default {
   text-align: center;
   letter-spacing: 0.2em;
   cursor: pointer;
+}
+
+.username {
+  margin-right: 30px;
+  font-size: 20px;
+  color: white
 }
 </style>
